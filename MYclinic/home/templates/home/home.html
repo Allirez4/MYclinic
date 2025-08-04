@@ -1,0 +1,168 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- بخش معرفی پزشک -->
+<div class="container my-5">
+  <div class="row align-items-center">
+    <!-- توضیحات -->
+    <div class="col-md-6">
+      <h1 class="fw-bold mb-3">دکتر علی شهسواری</h1>
+      <h4 class="text-muted mb-4">متخصص بیماری‌های داخلی</h4>
+      <p class="lead">
+        دکتر علی شهسواری با بیش از ۲۰ سال تجربه در زمینه تشخیص و درمان بیماری‌های داخلی، آماده خدمت‌رسانی به شما عزیزان می‌باشد. صداقت، تخصص و دلسوزی سه اصل کلیدی در طبابت ایشان است.
+      </p>
+      <a href="#reserve" class="btn btn-outline-primary rounded-pill mt-3">رزرو نوبت</a>
+    </div>
+
+    <!-- تصویر -->
+    <div class="col-md-6 text-center">
+      <img src="https://via.placeholder.com/400x500.png?text=Doctor+Photo" alt="دکتر علی شهسواری"
+           class="img-fluid rounded shadow">
+    </div>
+  </div>
+</div>
+<!-- بخش حوزه‌های تخصص -->
+<section class="bg-light py-5">
+  <div class="container">
+    <h2 class="text-center fw-bold mb-4">زمینه‌های تخصصی و درمانی دکتر شهسواری</h2>
+    <p class="text-center mb-5 text-muted">تشخیص و درمان دقیق بیماری‌های داخلی با سال‌ها تجربه و دانش علمی</p>
+
+    <div class="row">
+      <div class="col-md-6">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">🫀 بیماری‌های قلبی (تنگی نفس، عروق کرونر، نارسایی قلبی، و ...)</li>
+          <li class="list-group-item">🫁 بیماری‌های تنفسی (سرفه مزمن، تنگی نفس)</li>
+          <li class="list-group-item">🩸 بیماری‌های کلیوی (مانند نارسایی کلیه)</li>
+          <li class="list-group-item">🧬 بیماری‌های گوارشی (روده تحریک‌پذیر، بیماری‌های التهابی)</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">🩺 دیابت و اختلالات تیروئید</li>
+          <li class="list-group-item">🧪 کم‌خونی و فقر آهن</li>
+          <li class="list-group-item">💧 عفونت‌های ادراری  </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- لینک Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="container my-5">
+  <div class="row align-items-center">
+    <!-- Calendar Icon Box -->
+    <div class="col-12 col-md-4 mb-4">
+      <div class="calendar-box text-center shadow p-4 rounded" style="background-color: #eafaf1; animation: fadeIn 0.8s ease;">
+        <div class="calendar-icon bg-success bg-opacity-75 text-white rounded-circle mx-auto mb-3 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; font-size: 36px;">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        <h5 class="text-success fw-bold">برنامه هفتگی</h5>
+        <p class="text-muted mb-0"></p>
+      </div>
+    </div>
+
+    <!-- Working Hours: Each day separately -->
+    <div class="col-12 col-md-8">
+      <h4 class="text-success fw-bold mb-3">ساعات کاری مطب</h4>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #eafaf1;">
+          <span>شنبه</span>
+          <span class="text-success">15:00 تا 20:00</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #eafaf1;">
+          <span>یکشنبه</span>
+          <span class="text-success">15:00 تا 20:00</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #eafaf1;">
+          <span>دوشنبه</span>
+          <span class="text-success">15:00 تا 20:00</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #eafaf1;">
+          <span>سه‌شنبه</span>
+          <span class="text-success">15:00 تا 20:00</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #eafaf1;">
+          <span>چهارشنبه</span>
+          <span class="text-success">15:00 تا 20:00</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #f6fff9;">
+          <span>پنج‌شنبه</span>
+          <span class="text-danger">تعطیل</span>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="background-color: #f6fff9;">
+          <span>جمعه</span>
+          <span class="text-danger">تعطیل</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+
+
+<section class="py-5 bg-white">
+  <div class="container">
+    <h2 class="text-center text-success fw-bold mb-5">سوابق علمی و حرفه‌ای دکتر شهسواری</h2>
+    <div class="row g-4">
+
+      <!-- کارت ۱ -->
+      <div class="col-md-6">
+        <div class="card border-success shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title text-success fw-bold">
+              🎓 دانش‌آموخته تخصص داخلی
+            </h5>
+            <p class="card-text mb-1">دانشگاه علوم پزشکی تهران</p>
+            <p class="text-muted small">۱۳۸۵ - ۱۳۸۹</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- کارت ۲ -->
+      <div class="col-md-6">
+        <div class="card border-success shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title text-success fw-bold">
+              🧑‍🏫 عضو هیئت علمی
+            </h5>
+            <p class="card-text mb-1">دانشگاه علوم پزشکی کرمان</p>
+            <p class="text-muted small">۱۳۹۰ - ۱۳۹۵</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- کارت ۳ -->
+      <div class="col-md-6">
+        <div class="card border-success shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title text-success fw-bold">
+              🏥 پزشک معتمد تأمین اجتماعی
+            </h5>
+            <p class="card-text mb-1">بیمارستان شهید باهنر</p>
+            <p class="text-muted small">۱۳۹۵ تا کنون</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- کارت رزرو -->
+      <div class="col-md-6">
+        <div class="card border-success shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title text-success fw-bold">
+              📅 همکاری با کلینیک‌های تخصصی
+            </h5>
+            <p class="card-text mb-1">ارائه خدمات پزشکی در کلینیک‌های سطح شهر</p>
+            <p class="text-muted small">۱۳۹۸ تا کنون</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}
