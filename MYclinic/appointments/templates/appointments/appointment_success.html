@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0">
+                <div class="card-body text-center p-5">
+                    <!-- Success Icon -->
+                    <div class="mb-4">
+                        <div class="success-icon mx-auto">
+                            <svg width="80" height="80" viewBox="0 0 100 100" class="text-success">
+                                <circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="3"/>
+                                <path d="M25 50L40 65L75 30" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <!-- Success Message -->
+                    <h2 class="text-success mb-3">
+                        <i class="fas fa-check-circle me-2"></i>
+                        نوبت شما با موفقیت ثبت شد!
+                    </h2>
+                    
+                    <p class="text-muted mb-4">
+                        اطلاعات نوبت شما در زیر نمایش داده شده است. لطفاً این اطلاعات را ذخیره کنید.
+                    </p>
+                    
+                    <!-- Appointment Details Card -->
+                    <div class="appointment-details bg-light rounded p-4 mb-4">
+                        <h5 class="text-primary mb-3">
+                            <i class="fas fa-calendar-alt me-2"></i>
+                            جزئیات نوبت
+                        </h5>
+                        
+                        <div class="row text-start">
+                            <div class="col-sm-6 mb-3">
+                                <strong class="text-dark">نام:</strong>
+                                <div class="text-muted">{{ appointment.name }} {{ appointment.last_name|default:"" }}</div>
+                            </div>
+                            
+                            <div class="col-sm-6 mb-3">
+                                <strong class="text-dark">شماره تماس:</strong>
+                                <div class="text-muted">{{ appointment.phone_number }}</div>
+                            </div>
+                            
+                            <div class="col-12 mb-3">
+                                <strong class="text-dark">تاریخ و زمان نوبت:</strong>
+                                <div class="text-muted">
+                                    <i class="fas fa-clock me-1"></i>
+                                    {{ appointment.appointment_datetime|date:"Y/m/d - H:i" }}
+                                </div>
+                            </div>
+                            
+                            <div class="col-12">
+                                <strong class="text-dark">وضعیت پرداخت:</strong>
+                                <div>
+                                    {% if appointment.is_paid %}
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check-circle me-1"></i>
+                                            پرداخت شده
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-clock me-1"></i>
+                                            در انتظار پرداخت
+                                        </span>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Important Notes -->
+                    <div class="alert alert-info text-start">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-info-circle me-2"></i>
+                            نکات مهم:
+                        </h6>
+                        <ul class="mb-0 pe-4">
+                            <li>لطفاً ۱۵ دقیقه قبل از زمان نوبت در کلینیک حاضر شوید</li>
+                            <li>در صورت نیاز به تغییر نوبت، حداقل ۲۴ ساعت قبل اطلاع دهید</li>
+                            <li>مدارک پزشکی قبلی خود را همراه داشته باشید</li>
+                            <li>کارت ملی یا شناسایی معتبر الزامی است</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a href="{% url 'appointments:book_appointment' %}" class="btn btn-outline-primary">
+                            <i class="fas fa-plus me-2"></i>
+                            رزرو نوبت جدید
+                        </a>
+                        <a href="{% url 'home:home' %}" class="btn btn-primary">
+                            <i class="fas fa-home me-2"></i>
+                            بازگشت به صفحه اصلی
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.success-icon {
+    width: 80px;
+    height: 80px;
+    animation: successPulse 1.5s ease-in-out;
+}
+
+@keyframes successPulse {
+    0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.card {
+    border-radius: 15px;
+    transition: transform 0.3s ease;
+}
+
+.appointment-details {
+    border-right: 4px solid #0d6efd;
+}
+
+.badge {
+    font-size: 0.9em;
+    padding: 0.5em 0.8em;
+}
+
+.alert-info {
+    border-right: 4px solid #0dcaf0;
+    background-color: #f8f9fa;
+    border-color: #bee5eb;
+}
+
+@media (max-width: 768px) {
+    .card-body {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .d-grid.gap-2.d-md-flex {
+        gap: 0.5rem !important;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.5rem;
+    }
+}
+</style>
+{% endblock %}

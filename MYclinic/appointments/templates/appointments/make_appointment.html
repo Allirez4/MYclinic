@@ -1,0 +1,828 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid mt-5">
+    <div class="row justify-content-center">
+        <div class="col-11 col-xl-10">
+            <div class="row">
+                <!-- Form Section -->
+                <div class="col-md-8 col-lg-9">
+                    <div class="card shadow-lg border-0">
+                        <div class="card-header bg-primary text-white text-center py-4">
+                            <h3 class="mb-0">
+                                <i class="fas fa-calendar-plus me-2"></i>
+                                رزرو نوبت
+                            </h3>
+                            <p class="mb-0 mt-2 opacity-75">لطفاً اطلاعات خود را کامل وارد کنید</p>
+                        </div>
+                        
+                        <div class="card-body p-4 p-md-5">
+                            <form method="post" id="appointmentForm">
+                                {% csrf_token %}
+                                
+                                <!-- Personal Information Row -->
+                                <div class="row">
+                                    <!-- Name Field -->
+                                    <div class="col-md-6 mb-4">
+                                        <label for="{{ form.name.id_for_label }}" class="form-label fw-bold">
+                                            <i class="fas fa-user me-2 text-primary"></i>
+                                            نام *
+                                        </label>
+                                        {{ form.name }}
+                                        {% if form.name.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {{ form.name.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    <!-- Last Name Field -->
+                                    <div class="col-md-6 mb-4">
+                                        <label for="{{ form.last_name.id_for_label }}" class="form-label fw-bold">
+                                            <i class="fas fa-user me-2 text-primary"></i>
+                                            نام خانوادگی
+                                        </label>
+                                        {{ form.last_name }}
+                                        {% if form.last_name.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {{ form.last_name.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <!-- Phone Number Field -->
+                                <div class="mb-4">
+                                    <label for="{{ form.phone_number.id_for_label }}" class="form-label fw-bold">
+                                        <i class="fas fa-phone me-2 text-primary"></i>
+                                        شماره تماس *
+                                    </label>
+                                    {{ form.phone_number }}
+                                    {% if form.phone_number.errors %}
+                                        <div class="text-danger small mt-1">
+                                            {{ form.phone_number.errors }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="form-text">
+                                        <small class="text-muted">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            مثال: 09123456789
+                                        </small>
+                                    </div>
+                                </div>
+                                
+                                <!-- Appointment Date & Time Row -->
+                                <div class="row">
+                                    <!-- Date Field -->
+                                    <div class="col-md-4 mb-4">
+                                        <label for="persian_date" class="form-label fw-bold">
+                                            <i class="fas fa-calendar-alt me-2 text-primary"></i>
+                                            تاریخ نوبت *
+                                        </label>
+                                        <input type="text" id="persian_date" class="form-control" placeholder="تاریخ را انتخاب کنید" readonly>
+                                        {{ form.appointment_datetime }}
+                                        {% if form.appointment_datetime.errors %}
+                                            <div class="text-danger small mt-1">
+                                                {{ form.appointment_datetime.errors }}
+                                            </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <!-- Time Selection -->
+                                    <div class="col-md-8 mb-4">
+                                        <label class="form-label fw-bold">
+                                            <i class="fas fa-clock me-2 text-primary"></i>
+                                            ساعت نوبت *
+                                        </label>
+                                        <div class="row" id="time-slots">
+                                            <!-- Time slots will be generated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Submit Button -->
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary btn-lg py-3">
+                                        <i class="fas fa-check me-2"></i>
+                                        ثبت نوبت
+                                    </button>
+                                    
+                                    <!-- Debug button (remove in production) -->
+                                    
+                                    
+                                    <a href="{% url 'home:home' %}" class="btn btn-outline-secondary">
+                                        <i class="fas fa-arrow-right me-2"></i>
+                                        انصراف
+                                    </a>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Information Panel -->
+                <div class="col-md-4 col-lg-3">
+                    <div class="sticky-top" style="top: 2rem;">
+                        <!-- Important Notice -->
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-header bg-warning text-dark">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>
+                                    نکات مهم
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-3">
+                                        <i class="fas fa-star text-warning me-2"></i>
+                                        همه فیلدهای ستاره‌دار اجباری هستند
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-ban text-danger me-2"></i>
+                                        پس از ثبت نوبت، امکان تغییر آنلاین وجود ندارد
+                                    </li>
+                                    <li class="mb-0">
+                                        <i class="fas fa-phone text-info me-2"></i>
+                                        برای تغییر نوبت با کلینیک تماس بگیرید
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Pre-visit Instructions -->
+                        <div class="card border-0 shadow-sm mb-4">
+                            <div class="card-header bg-info text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-clipboard-check me-2"></i>
+                                    راهنمای مراجعه
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-unstyled mb-0">
+                                    <li class="mb-3">
+                                        <i class="fas fa-clock text-primary me-2"></i>
+                                        ۱۵ دقیقه قبل از زمان نوبت حاضر شوید
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-id-card text-success me-2"></i>
+                                        کارت ملی یا شناسایی معتبر همراه داشته باشید
+                                    </li>
+                                    <li class="mb-3">
+                                        <i class="fas fa-file-medical text-warning me-2"></i>
+                                        مدارک پزشکی قبلی را همراه داشته باشید
+                                    </li>
+                                    <li class="mb-0">
+                                        <i class="fas fa-calendar-times text-danger me-2"></i>
+                                        برای لغو، حداقل ۲۴ ساعت قبل اطلاع دهید
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Contact Info -->
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-phone me-2"></i>
+                                    اطلاعات تماس
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <p class="mb-2">
+                                    <i class="fas fa-phone text-success me-2"></i>
+                                    <strong>تلفن:</strong> 021-12345678
+                                </p>
+                                <p class="mb-2">
+                                    <i class="fas fa-mobile-alt text-primary me-2"></i>
+                                    <strong>موبایل:</strong> 09123456789
+                                </p>
+                                <p class="mb-0">
+                                    <i class="fas fa-map-marker-alt text-danger me-2"></i>
+                                    <strong>آدرس:</strong> تهران، خیابان ولیعصر، کلینیک تخصصی
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.card-header {
+    border: none;
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+}
+
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    padding: 12px 15px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+.form-label {
+    color: #495057;
+    margin-bottom: 8px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+}
+
+.btn-outline-secondary {
+    border-radius: 10px;
+    border-width: 2px;
+    font-weight: 600;
+}
+
+.text-danger {
+    font-size: 14px;
+}
+
+.is-invalid {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.is-invalid:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.time-slot {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+.time-slot input[type="radio"] {
+    display: none;
+}
+
+.time-slot label {
+    display: block;
+    padding: 15px 12px;
+    background: #f8f9fa;
+    border: 3px solid #e9ecef;
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: 700;
+    font-size: 16px;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+    color: #212529;
+    line-height: 1.2;
+    min-height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.time-slot input[type="radio"]:checked + label {
+    background: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+    transform: scale(1.05);
+}
+
+.time-slot label:hover {
+    border-color: #0d6efd;
+    background: #e7f1ff;
+    transform: translateY(-2px);
+}
+
+.time-slot input[type="radio"]:checked + label:hover {
+    background: #0b5ed7;
+}
+
+/* Persian Calendar Styles */
+.persian-datepicker {
+    direction: rtl;
+    font-family: 'Vazir', 'Tahoma', sans-serif;
+}
+
+.persian-datepicker .datepicker-dropdown {
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border: none;
+}
+
+.sticky-top {
+    position: sticky;
+    top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .card-body {
+        padding: 2rem 1.5rem !important;
+    }
+    
+    .container-fluid {
+        margin-top: 2rem !important;
+    }
+    
+    .sticky-top {
+        position: static;
+        margin-top: 2rem;
+    }
+    
+    /* Make form single column on mobile */
+    .row .col-md-6,
+    .row .col-md-4,
+    .row .col-md-8 {
+        flex: 0 0 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    .time-slot {
+        margin-bottom: 12px;
+    }
+    
+    .time-slot label {
+        padding: 18px 10px;
+        font-size: 17px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        border-radius: 12px;
+        border-width: 3px;
+        letter-spacing: 0.5px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    
+    .time-slot input[type="radio"]:checked + label {
+        font-size: 18px;
+        font-weight: 800;
+        transform: scale(1.02);
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.3);
+    }
+    
+    #time-slots .col-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+    
+    #time-slots .col-md-3 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    #time-slots .col-lg-3 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+    
+    #time-slots .col-xl-2 {
+        flex: 0 0 50%;
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 576px) {
+    .time-slot {
+        margin-bottom: 15px;
+    }
+    
+    .time-slot label {
+        padding: 22px 12px;
+        font-size: 20px;
+        min-height: 70px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        color: #333;
+        border-width: 4px;
+        border-radius: 15px;
+        box-shadow: 0 3px 12px rgba(0,0,0,0.15);
+        transition: all 0.2s ease;
+    }
+    
+    .time-slot label:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(13, 110, 253, 0.25);
+    }
+    
+    #time-slots {
+        margin-left: -3px;
+        margin-right: -3px;
+    }
+    
+    #time-slots .col-6 {
+        padding-left: 3px;
+        padding-right: 3px;
+    }
+    
+    .time-slot input[type="radio"]:checked + label {
+        font-size: 22px;
+        font-weight: 900;
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(13, 110, 253, 0.4);
+    }
+    
+    .time-slot input[type="radio"]:checked + label:hover {
+        transform: scale(1.05) translateY(-2px);
+        box-shadow: 0 8px 25px rgba(13, 110, 253, 0.5);
+    }
+}
+
+/* Extra small phones */
+@media (max-width: 480px) {
+    .time-slot label {
+        padding: 25px 15px;
+        font-size: 22px;
+        min-height: 75px;
+        font-weight: 900;
+        letter-spacing: 1.2px;
+        border-width: 5px;
+        border-radius: 18px;
+    }
+    
+    .time-slot input[type="radio"]:checked + label {
+        font-size: 24px;
+    }
+    
+    #time-slots .col-6 {
+        margin-bottom: 10px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 360px) {
+    .time-slot label {
+        padding: 20px 10px;
+        font-size: 20px;
+        min-height: 65px;
+        letter-spacing: 0.8px;
+    }
+    
+    .time-slot input[type="radio"]:checked + label {
+        font-size: 21px;
+    }
+}
+
+@media (min-width: 992px) {
+    .time-slot label {
+        padding: 12px 10px;
+        font-size: 14px;
+    }
+}
+
+/* RTL Support */
+body {
+    direction: rtl;
+    text-align: right;
+}
+
+.form-control, .form-select {
+    text-align: right;
+}
+
+.btn {
+    direction: rtl;
+}
+
+/* Card hover effects */
+.card:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+}
+
+.list-unstyled li {
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.list-unstyled li:last-child {
+    border-bottom: none;
+}
+
+/* Better form width utilization */
+.form-control {
+    width: 100%;
+}
+
+/* Wider layout improvements */
+@media (min-width: 1200px) {
+    .time-slot label {
+        padding: 15px 8px;
+        font-size: 15px;
+        min-height: 50px;
+    }
+}
+
+@media (min-width: 1400px) {
+    .col-xl-2 {
+        flex: 0 0 16.666667%;
+        max-width: 16.666667%;
+    }
+}
+</style>
+
+<!-- Persian Date Picker CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/css/persian-datepicker.min.css">
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/persian-date@1.1.0/dist/persian-date.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/persian-datepicker@1.2.0/dist/js/persian-datepicker.min.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add Bootstrap classes to form fields immediately
+    document.querySelectorAll('input:not([type="radio"]):not([type="hidden"]), select, textarea').forEach(function(control) {
+        if (!control.classList.contains('btn') && !control.classList.contains('form-control')) {
+            control.classList.add('form-control');
+        }
+    });
+    
+    // Generate time slots
+    function generateTimeSlots() {
+        const timeSlots = [
+            '16:00', '16:30', '17:00', '17:30', '18:00', '18:30',
+            '19:00', '19:30', '20:00', '20:30', '21:00'
+        ];
+        
+        const container = document.getElementById('time-slots');
+        container.innerHTML = '';
+        
+        timeSlots.forEach(function(time, index) {
+            const div = document.createElement('div');
+            // Better responsive columns for wider layout
+            div.className = 'col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 mb-3';
+            
+            const timeSlotDiv = document.createElement('div');
+            timeSlotDiv.className = 'time-slot';
+            
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = 'appointment_time';
+            input.value = time;
+            input.id = 'time_' + index;
+            
+            const label = document.createElement('label');
+            label.setAttribute('for', 'time_' + index);
+            label.textContent = time;
+            
+            timeSlotDiv.appendChild(input);
+            timeSlotDiv.appendChild(label);
+            div.appendChild(timeSlotDiv);
+            container.appendChild(div);
+        });
+    }
+    
+    // Initialize time slots
+    generateTimeSlots();
+    
+    // Persian Date Picker
+    $('#persian_date').pDatepicker({
+        initialValue: false,
+        format: 'YYYY/MM/DD',
+        autoClose: true,
+        calendar: {
+            persian: {
+                locale: 'fa'
+            }
+        },
+        minDate: new persianDate().valueOf(),
+        onSelect: function(unix) {
+            const pDate = new persianDate(unix);
+            const gregorianDate = pDate.toDate();
+            
+            // Format for Django (YYYY-MM-DD HH:MM:SS)
+            const year = gregorianDate.getFullYear();
+            const month = String(gregorianDate.getMonth() + 1).padStart(2, '0');
+            const day = String(gregorianDate.getDate()).padStart(2, '0');
+            
+            // Store the selected date (time will be added when time slot is selected)
+            window.selectedDate = `${year}-${month}-${day}`;
+            console.log('Date selected:', window.selectedDate);
+            
+            // If time is already selected, update datetime immediately
+            if (window.selectedTime) {
+                updateDateTime();
+            } else {
+                // Set a default time to make the field valid
+                const hiddenField = document.querySelector('input[name="appointment_datetime"]');
+                if (hiddenField) {
+                    hiddenField.value = `${window.selectedDate} 16:00:00`;
+                    console.log('Hidden field populated with default time:', hiddenField.value);
+                }
+            }
+            
+            // Remove error styling if date is selected
+            document.getElementById('persian_date').classList.remove('is-invalid');
+        }
+    });
+    
+    // Handle time slot selection
+    document.addEventListener('change', function(e) {
+        if (e.target.name === 'appointment_time') {
+            window.selectedTime = e.target.value;
+            console.log('Time selected:', window.selectedTime);
+            updateDateTime();
+            
+            // Remove error indication when time is selected
+            document.querySelectorAll('.time-slot label').forEach(function(label) {
+                label.style.borderColor = '#e9ecef';
+                label.style.borderWidth = '2px';
+            });
+        }
+    });
+    
+    // Update datetime field
+    function updateDateTime() {
+        const hiddenField = document.querySelector('input[name="appointment_datetime"]');
+        if (!hiddenField) {
+            console.log('Hidden field not found!');
+            return;
+        }
+        
+        if (window.selectedDate && window.selectedTime) {
+            const datetime = `${window.selectedDate} ${window.selectedTime}:00`;
+            hiddenField.value = datetime;
+            console.log('DateTime updated with both date and time:', datetime);
+        } else if (window.selectedDate) {
+            // If only date is selected, use default time
+            const defaultTime = window.selectedTime || '16:00';
+            const datetime = `${window.selectedDate} ${defaultTime}:00`;
+            hiddenField.value = datetime;
+            console.log('DateTime updated with default time:', datetime);
+        } else {
+            console.log('No date selected, cannot update datetime');
+        }
+    }
+    
+    // Add Bootstrap classes to form fields immediately
+    document.querySelectorAll('input:not([type="radio"]):not([type="hidden"]), select, textarea').forEach(function(control) {
+        if (!control.classList.contains('btn') && !control.classList.contains('form-control')) {
+            control.classList.add('form-control');
+        }
+    });
+    
+    // Form validation
+    const form = document.getElementById('appointmentForm');
+    form.addEventListener('submit', function(e) {
+        console.log('=== Form Validation Started ===');
+        let isValid = true;
+        let errorMessages = [];
+        
+        // Check name field
+        const nameField = document.querySelector('input[name="name"]');
+        const nameValue = nameField ? nameField.value.trim() : '';
+        console.log('Name field value:', nameValue);
+        console.log('Name field found:', nameField ? 'YES' : 'NO');
+        
+        if (!nameValue) {
+            isValid = false;
+            if (nameField) nameField.classList.add('is-invalid');
+            errorMessages.push('• لطفاً نام خود را وارد کنید');
+        } else {
+            if (nameField) nameField.classList.remove('is-invalid');
+        }
+        
+        // Check phone field
+        const phoneField = document.querySelector('input[name="phone_number"]');
+        const phoneValue = phoneField ? phoneField.value.trim() : '';
+        console.log('Phone field value:', phoneValue);
+        
+        if (!phoneValue) {
+            isValid = false;
+            if (phoneField) phoneField.classList.add('is-invalid');
+            errorMessages.push('• لطفاً شماره تماس خود را وارد کنید');
+        } else {
+            if (phoneField) phoneField.classList.remove('is-invalid');
+        }
+        
+        // Check date and time selection
+        const persianDate = document.getElementById('persian_date').value;
+        const hiddenDateTime = document.querySelector('input[name="appointment_datetime"]');
+        const hiddenDateTimeValue = hiddenDateTime ? hiddenDateTime.value : '';
+        
+        console.log('Persian Date field value:', persianDate);
+        console.log('Hidden DateTime field value:', hiddenDateTimeValue);
+        console.log('Global selectedDate:', window.selectedDate);
+        console.log('Global selectedTime:', window.selectedTime);
+        
+        // Validate date selection
+        if (!persianDate.trim() && !window.selectedDate) {
+            isValid = false;
+            document.getElementById('persian_date').classList.add('is-invalid');
+            errorMessages.push('• لطفاً تاریخ نوبت را انتخاب کنید');
+        } else {
+            document.getElementById('persian_date').classList.remove('is-invalid');
+            
+            // Ensure hidden field is populated
+            if (window.selectedDate && (!hiddenDateTimeValue.trim() || hiddenDateTimeValue === '')) {
+                const timeToUse = window.selectedTime || '16:00';
+                const datetime = `${window.selectedDate} ${timeToUse}:00`;
+                console.log('Populating hidden field with:', datetime);
+                if (hiddenDateTime) {
+                    hiddenDateTime.value = datetime;
+                }
+            }
+        }
+        
+        // Check time selection
+        const selectedTimeRadio = document.querySelector('input[name="appointment_time"]:checked');
+        console.log('Selected time radio:', selectedTimeRadio ? selectedTimeRadio.value : 'none');
+        
+        if (!selectedTimeRadio && !window.selectedTime) {
+            isValid = false;
+            errorMessages.push('• لطفاً ساعت نوبت را انتخاب کنید');
+            // Visual indication for time slots
+            document.querySelectorAll('.time-slot label').forEach(function(label) {
+                label.style.borderColor = '#dc3545';
+                label.style.borderWidth = '3px';
+            });
+        } else {
+            // Remove error indication
+            document.querySelectorAll('.time-slot label').forEach(function(label) {
+                label.style.borderColor = '#e9ecef';
+                label.style.borderWidth = '2px';
+            });
+        }
+        
+        console.log('Validation result:', isValid ? 'PASSED' : 'FAILED');
+        console.log('Error messages:', errorMessages);
+        
+        // Show errors if validation fails
+        if (!isValid) {
+            e.preventDefault();
+            let alertMessage = 'لطفاً موارد زیر را تکمیل کنید:\n\n' + errorMessages.join('\n');
+            alert(alertMessage);
+            
+            // Scroll to first error
+            const firstError = document.querySelector('.is-invalid');
+            if (firstError) {
+                firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        } else {
+            console.log('=== Form Validation Passed - Submitting ===');
+        }
+    });
+});
+
+// Debug function to check form state
+function debugFormState() {
+    console.log('=== DEBUG FORM STATE ===');
+    
+    // Check all form fields
+    const nameField = document.querySelector('input[name="name"]');
+    const phoneField = document.querySelector('input[name="phone_number"]');
+    const persianDateField = document.getElementById('persian_date');
+    const hiddenDateTime = document.querySelector('input[name="appointment_datetime"]');
+    const selectedTimeRadio = document.querySelector('input[name="appointment_time"]:checked');
+    
+    console.log('Name field:', nameField ? nameField.value : 'NOT FOUND');
+    console.log('Phone field:', phoneField ? phoneField.value : 'NOT FOUND');
+    console.log('Persian date field:', persianDateField ? persianDateField.value : 'NOT FOUND');
+    console.log('Hidden datetime field:', hiddenDateTime ? hiddenDateTime.value : 'NOT FOUND');
+    console.log('Selected time radio:', selectedTimeRadio ? selectedTimeRadio.value : 'NOT FOUND');
+    console.log('Global selectedDate:', window.selectedDate);
+    console.log('Global selectedTime:', window.selectedTime);
+    
+    // Show alert with form state
+    let message = 'وضعیت فرم:\n\n';
+    message += `نام: ${nameField ? nameField.value : 'یافت نشد'}\n`;
+    message += `تلفن: ${phoneField ? phoneField.value : 'یافت نشد'}\n`;
+    message += `تاریخ فارسی: ${persianDateField ? persianDateField.value : 'یافت نشد'}\n`;
+    message += `فیلد مخفی: ${hiddenDateTime ? hiddenDateTime.value : 'یافت نشد'}\n`;
+    message += `ساعت انتخابی: ${selectedTimeRadio ? selectedTimeRadio.value : 'یافت نشد'}\n`;
+    message += `متغیر تاریخ: ${window.selectedDate || 'یافت نشد'}\n`;
+    message += `متغیر ساعت: ${window.selectedTime || 'یافت نشد'}`;
+    
+    alert(message);
+}
+</script>
+{% endblock %}
