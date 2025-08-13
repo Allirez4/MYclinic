@@ -6,7 +6,7 @@ class Appointment(models.Model):
     phone_number = models.CharField(max_length=20)
     appointment_datetime = models.DateTimeField()
     is_paid = models.BooleanField(default=False)  # بعد از پرداخت میشه 
-
+    authority = models.CharField(max_length=100,blank=True,null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
