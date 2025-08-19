@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div dir="rtl" class="rtl-page">
+<style>
+  .rtl-page {direction: rtl; text-align: right;}
+  .rtl-page .text-center {text-align: center !important;}
+  .rtl-page .list-group-item {text-align: right;}
+  
+  /* Service Card Styles */
+  .service-card {
+    background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    border: none;
+    transition: all 0.4s ease;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(40, 167, 69, 0.2);
+  }
+  
+  .service-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #28a745, #20c997);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    font-size: 2rem;
+    color: white;
+    box-shadow: 0 10px 30px rgba(40, 167, 69, 0.3);
+    transition: transform 0.3s ease;
+  }
+  
+  .service-card:hover .service-icon {
+    transform: scale(1.1) rotate(5deg);
+  }
+  
+  .service-title {
+    color: #28a745;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+  }
+  
+  .service-description {
+    color: #6c757d;
+    line-height: 1.7;
+    margin-bottom: 1.5rem;
+  }
+  
+  .service-features {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .service-features li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e9ecef;
+    position: relative;
+    padding-right: 1.5rem;
+  }
+  
+  .service-features li:before {
+    content: "✓";
+    position: absolute;
+    right: 0;
+    color: #28a745;
+    font-weight: bold;
+  }
+  
+  .service-features li:last-child {
+    border-bottom: none;
+  }
+  
+  .hero-section {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    padding: 5rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.1"/><circle cx="80" cy="40" r="1.5" fill="white" opacity="0.1"/><circle cx="40" cy="80" r="1" fill="white" opacity="0.1"/></svg>');
+  }
+  
+  .breadcrumb-item + .breadcrumb-item::before {
+    content: "«";
+    float: right;
+  }
+  
+  .stats-section {
+    background: #f8f9fa;
+    padding: 3rem 0;
+  }
+  
+  .stat-box {
+    text-align: center;
+    padding: 2rem;
+  }
+  
+  .stat-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #28a745;
+    display: block;
+  }
+  
+  .appointment-cta {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    padding: 4rem 0;
+    text-align: center;
+  }
+  
+  .btn-appointment {
+    background: white;
+    color: #28a745;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  }
+  
+  .btn-appointment:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    color: #28a745;
+  }
+</style>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb bg-transparent">
+        <li class="breadcrumb-item"><a href="{% url 'home:home' %}" class="text-white">خانه</a></li>
+        <li class="breadcrumb-item active text-white" aria-current="page">خدمات درمانی</li>
+      </ol>
+    </nav>
+    
+    <div class="row align-items-center">
+      <div class="col-lg-8 mx-auto text-center">
+        <h1 class="display-4 fw-bold mb-4">خدمات تخصصی مطب دکتر شهسواری</h1>
+        <p class="lead mb-4">ارائه کاملترین خدمات تشخیصی و درمانی در زمینه بیماری‌های داخلی با بهره‌گیری از جدیدترین دستاورد‌های علم پزشکی</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Services Grid -->
+<section class="py-5">
+  <div class="container">
+    <div class="row g-4">
+      
+      <!-- Service 1: Heart Diseases -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card service-card h-100 p-4">
+          <div class="service-icon">
+            <i class="fas fa-heartbeat"></i>
+          </div>
+          <h4 class="service-title text-center">بیماری‌های قلبی و عروقی</h4>
+          <p class="service-description text-center">
+            تشخیص و درمان انواع بیماری‌های قلبی شامل نارسایی قلبی، آریتمی و بیماری‌های عروق کرونر
+          </p>
+          <ul class="service-features">
+            <li>الکتروکاردیوگرافی (ECG)</li>
+            <li>اکوکاردیوگرافی</li>
+            <li>تست ورزش قلبی</li>
+            <li>مانیتورینگ فشار خون</li>
+            <li>درمان آریتمی</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 2: Respiratory Diseases -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card service-card h-100 p-4">
+          <div class="service-icon">
+            <i class="fas fa-lungs"></i>
+          </div>
+          <h4 class="service-title text-center">بیماری‌های تنفسی</h4>
+          <p class="service-description text-center">
+            درمان تخصصی آسم، COPD، عفونت‌های تنفسی و سایر اختلالات دستگاه تنفس
+          </p>
+          <ul class="service-features">
+            <li>اسپیرومتری</li>
+            <li>درمان آسم</li>
+            <li>مدیریت COPD</li>
+            <li>درمان عفونت‌های ریوی</li>
+            <li>ترک سیگار</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 3: Diabetes & Endocrine -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card service-card h-100 p-4">
+          <div class="service-icon">
+            <i class="fas fa-syringe"></i>
+          </div>
+          <h4 class="service-title text-center">دیابت و غدد</h4>
+          <p class="service-description text-center">
+            کنترل و درمان دیابت، اختلالات تیروئید و سایر بیماری‌های غدد درون‌ریز
+          </p>
+          <ul class="service-features">
+            <li>تنظیم قند خون</li>
+            <li>آموزش تغذیه دیابتی</li>
+            <li>درمان تیروئید</li>
+            <li>مدیریت چاقی</li>
+            <li>پیگیری عوارض دیابت</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 4: Kidney Diseases -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card service-card h-100 p-4">
+          <div class="service-icon">
+            <img src="{% static 'images/kidney.png' %}" alt="kidney" style="width: 50px; height: 50px; filter: brightness(0) invert(1);">
+          </div>
+          <h4 class="service-title text-center">بیماری‌های کلیوی</h4>
+          <p class="service-description text-center">
+            تشخیص و درمان نارسایی کلیه، عفونت‌های ادراری و سنگ کلیه
+          </p>
+          <ul class="service-features">
+            <li>بررسی عملکرد کلیه</li>
+            <li>درمان عفونت ادراری</li>
+            <li>مدیریت نارسایی کلیه</li>
+            <li>پیشگیری از سنگ کلیه</li>
+            <li>کنترل فشار خون کلیوی</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 5: Digestive Diseases -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card service-card h-100 p-4">
+          <div class="service-icon">
+            <img src="{% static 'images/stomach.png' %}" alt="stomach" style="width: 50px; height: 50px; filter: brightness(0) invert(1);">
+          </div>
+          <h4 class="service-title text-center">بیماری‌های گوارشی</h4>
+          <p class="service-description text-center">
+            درمان اختلالات گوارشی شامل روده تحریک‌پذیر، التهابات و عفونت‌های گوارشی
+          </p>
+          <ul class="service-features">
+            <li>اندوسکوپی</li>
+            <li>درمان IBS</li>
+            <li>مدیریت ریفلاکس</li>
+            <li>درمان هلیکوباکتر</li>
+            <li>بررسی اختلالات جذب</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Service 6: Blood Disorders -->
+      <div class="col-lg-4 col-md-6">
+        <div class="card service-card h-100 p-4">
+          <div class="service-icon">
+            <i class="fas fa-tint"></i>
+          </div>
+          <h4 class="service-title text-center">اختلالات خونی</h4>
+          <p class="service-description text-center">
+            تشخیص و درمان کم‌خونی، فقر آهن و سایر اختلالات خونی
+          </p>
+          <ul class="service-features">
+            <li>بررسی کم‌خونی</li>
+            <li>درمان فقر آهن</li>
+            <li>آزمایش‌های خونی تخصصی</li>
+            <li>مدیریت اختلالات انعقاد</li>
+            <li>پیگیری مارکرهای التهابی</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-6">
+        <div class="stat-box">
+          <span class="stat-number">20+</span>
+          <p class="text-muted">سال تجربه</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-box">
+          <span class="stat-number">5000+</span>
+          <p class="text-muted">بیمار درمان شده</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-box">
+          <span class="stat-number">15+</span>
+          <p class="text-muted">خدمات تخصصی</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-box">
+          <span class="stat-number">98%</span>
+          <p class="text-muted">رضایت بیماران</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="appointment-cta">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+        <h2 class="display-5 fw-bold mb-4">آماده خدمت‌رسانی به شما هستیم</h2>
+        <p class="lead mb-4">برای دریافت بهترین خدمات درمانی، همین حالا نوبت خود را رزرو کنید</p>
+        <a href="{% url 'appointments:book_appointment' %}" class="btn btn-appointment btn-lg">
+          <i class="fas fa-calendar-plus me-2"></i>
+          رزرو نوبت آنلاین
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</div>
+{% endblock %}

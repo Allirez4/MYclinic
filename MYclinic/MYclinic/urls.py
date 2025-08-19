@@ -16,12 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('home.urls')),  # Include the URLs from the home app
     path('appointments/', include('appointments.urls')),  # Include the URLs from the appointments app
+    path('', include('gallery.urls')),  # Include the URLs from the gallery app
     #path('blog/', include('blog.urls')),  # Include the URLs from the blog app
-    #path('testimonials/', include('testimonials.urls')),  # Include the URLs from the testimonials app
+    path('testimonials/', include('testimonials.urls')),  # Include the URLs from the testimonials app
     
 ]
+
+# Serve media files during development
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])

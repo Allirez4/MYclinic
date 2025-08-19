@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div dir="rtl" class="rtl-page">
+<style>
+  .rtl-page {direction: rtl; text-align: right;}
+  .rtl-page .text-center {text-align: center !important;}
+  /* جلوگیری از برهم خوردن چیدمان flex در اجزای بوت‌استرپ */
+  .rtl-page .list-group-item {text-align: right;}
+</style>
 <!-- بخش معرفی پزشک -->
 <div class="container my-5">
   <div class="row align-items-center">
@@ -11,7 +18,7 @@
       <p class="lead">
         دکتر علی شهسواری با بیش از ۲۰ سال تجربه در زمینه تشخیص و درمان بیماری‌های داخلی، آماده خدمت‌رسانی به شما عزیزان می‌باشد. صداقت، تخصص و دلسوزی سه اصل کلیدی در طبابت ایشان است.
       </p>
-      <a href="#reserve" class="btn btn-outline-primary rounded-pill mt-3">رزرو نوبت</a>
+      <a href="appointments/book" class="btn btn-outline-primary rounded-pill mt-3">رزرو نوبت</a>
     </div>
 
     <!-- تصویر -->
@@ -169,11 +176,81 @@
   <div class="container">
     <h2 class="text-center text-success fw-bold mb-5">نظرات بیماران</h2>
     
-    <div id="comments-container" class="row g-4">
-      <!-- نظرات از طریق جاوااسکریپت بارگذاری می‌شوند -->
+    {% if testimonials %}
+    <div class="row g-4">
+      {% for testimonial in testimonials %}
+      <div class="col-lg-4 col-md-6">
+        <div class="card border-0 shadow-sm h-100 testimonial-card">
+          <div class="card-body p-4">
+            <!-- نجوم امتیاز -->
+            <div class="mb-3 text-center">
+              {% for i in "12345" %}
+                <i class="fas fa-star text-warning"></i>
+              {% endfor %}
+            </div>
+            
+            <!-- متن نظر -->
+            <blockquote class="blockquote text-center mb-4">
+              <p class="mb-0 fs-6 text-muted fst-italic">
+                "{{ testimonial.comment|truncatewords:20 }}"
+              </p>
+            </blockquote>
+            
+            <!-- اطلاعات نظردهنده -->
+            <div class="text-center">
+              <div class="testimonial-avatar bg-success text-white rounded-circle mx-auto mb-2 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                <i class="fas fa-user"></i>
+              </div>
+              <h6 class="fw-bold text-success mb-1">{{ testimonial.firstname }} {{ testimonial.lastname }}</h6>
+              <small class="text-muted">
+                <i class="fas fa-calendar-alt me-1"></i>
+                {{ testimonial.created_at|date:"d F Y" }}
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
     </div>
+    
+    <!-- دکمه مشاهده همه نظرات -->
+    <div class="text-center mt-5">
+      <a href="{% url 'testimonials:testimonials' %}" class="btn btn-outline-success rounded-pill px-4">
+        <i class="fas fa-comments me-2"></i>
+        ثبت نظر جدید
+      </a>
+    </div>
+    
+    {% else %}
+    <!-- در صورت عدم وجود نظرات -->
+    <div class="text-center py-5">
+      <div class="mb-4">
+        <i class="fas fa-comments text-muted" style="font-size: 4rem; opacity: 0.3;"></i>
+      </div>
+      <h5 class="text-muted mb-3">هنوز نظری ثبت نشده است</h5>
+      <p class="text-muted mb-4">اولین نفری باشید که نظر خود را درباره خدمات ما ثبت می‌کند</p>
+      <a href="{% url 'testimonials:testimonials' %}" class="btn btn-success rounded-pill px-4">
+        <i class="fas fa-plus me-2"></i>
+        ثبت اولین نظر
+      </a>
+    </div>
+    {% endif %}
   </div>
 </section>
+
+<style>
+.testimonial-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 15px;
+}
+.testimonial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15) !important;
+}
+.testimonial-avatar {
+  font-size: 1.2rem;
+}
+</style>
 
 <!-- بخش تماس با ما -->
 <section class="py-5 bg-white" id="contact">
@@ -183,9 +260,14 @@
       
       <!-- اطلاعات تماس -->
       <div class="col-md-6">
-        <div class="mb-3">
+        <div class="mb-3 contact-phone">
           <h5 class="text-success"><i class="fas fa-phone-alt me-2"></i> شماره تماس:</h5>
-          <p class="fs-5">۰۲۱-۱۲۳۴۵۶۷۸</p>
+          <p class="fs-5 mb-1">
+            <a href="tel:02112345678" class="text-decoration-none fw-bold" style="direction:ltr; display:inline-block;">
+              ۰۲۱-۱۲۳۴۵۶۷۸
+            </a>
+          </p>
+          <small class="text-muted">برای تماس روی شماره بزنید</small>
         </div>
         <div class="mb-3">
           <h5 class="text-success"><i class="fas fa-map-marker-alt me-2"></i> آدرس:</h5>
@@ -211,3 +293,5 @@
 
 
 {% endblock %}
+<!-- پایان محتوای RTL -->
+</div>
