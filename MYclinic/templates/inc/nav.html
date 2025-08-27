@@ -2,8 +2,8 @@
   <style>
     .rtl-nav {direction: rtl; text-align: right;}
     .rtl-nav .navbar-nav .nav-link {padding-left: .75rem; padding-right: .75rem;}
-    /* دکمه رزرو را در حالت RTL سمت چپ لیست نگه می‌داریم */
-    .rtl-nav .navbar-nav {flex-direction: row-reverse;}
+    /* حذف row-reverse برای جلوگیری از معکوس شدن ترتیب آیتم‌ها */
+    .rtl-nav .navbar-nav {flex-direction: row;}
     .rtl-nav .navbar-nav .nav-item:last-child {margin-right: 1rem;}
     @media (max-width: 991.98px){
       .rtl-nav .navbar-nav {flex-direction: column; align-items: flex-start;}
@@ -23,8 +23,8 @@
   <ul class="navbar-nav">
         
         <li class="nav-item">
-          <a href="{% url 'appointments:book_appointment' %}" class="btn btn-primary rounded-pill">رزرو آنلاین</a>
           
+          <a class="nav-link" href="{% url 'testimonials:testimonials' %}">ثبت نظر و ارتباط با ما</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{% url 'gallery:gallery' %}">گالری</a>
@@ -36,7 +36,8 @@
           <a class="nav-link" href="{% url 'home:home' %}#contact">تماس با ما</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="{% url 'testimonials:testimonials' %}">ثبت نظر و ارتباط با ما</a>
+          
+          <a href="{% url 'appointments:book_appointment' %}" class="btn btn-primary rounded-pill">رزرو آنلاین</a>
         </li>
       </ul>
     </div>

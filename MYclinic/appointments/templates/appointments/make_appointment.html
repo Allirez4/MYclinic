@@ -615,9 +615,46 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         },
         minDate: new persianDate().valueOf(),
+        disableBeforeToday: true,
+        disable: function(unix) {
+            const pDate = new persianDate(unix);
+            const dayOfWeek = pDate.format('d'); // 0=شنبه, 1=یکشنبه, 2=دوشنبه, 3=سه‌شنبه, 4=چهارشنبه, 5=پنج‌شنبه, 6=جمعه
+            // غیرفعال کردن پنج‌شنبه (5) و جمعه (6)
+            return dayOfWeek == 5 || dayOfWeek == 6;
+        },
+        // اضافه کردن رنگ برای روزهای تعطیل
+        onShow: function() {
+            setTimeout(function() {
+                $('.datepicker-day-view td').each(function() {
+                    const $td = $(this);
+                    if ($td.attr('data-unix')) {
+                        const unixTime = parseInt($td.attr('data-unix'));
+                        const date = new persianDate(unixTime);
+                        const dayOfWeek = date.format('d'); // 0=شنبه, 1=یکشنبه, 2=دوشنبه, 3=سه‌شنبه, 4=چهارشنبه, 5=پنج‌شنبه, 6=جمعه
+                        
+                        // پنجشنبه و جمعه را با رنگ قرمز مشخص می‌کنیم
+                        if (dayOfWeek == 5 || dayOfWeek == 6) {
+                            $td.addClass('weekend-days');
+                            $td.css('background-color', '#ffdbdb');
+                            $td.css('color', '#ff5252');
+                            $td.append('<small style="display:block;font-size:8px;margin-top:-3px;">تعطیل</small>');
+                        }
+                    }
+                });
+            }, 100);
+        },
         onSelect: function(unix) {
             const pDate = new persianDate(unix);
             const gregorianDate = pDate.toDate();
+            
+            // Check if Thursday or Friday is selected (in JavaScript 0=Sunday, 1=Monday, ..., 5=Friday, 6=Saturday)
+            const dayOfWeek = gregorianDate.getDay();
+            if (dayOfWeek === 4 || dayOfWeek === 5) {
+                alert('پنج‌شنبه و جمعه مطب تعطیل است. لطفاً روز دیگری انتخاب کنید.');
+                $('#persian_date').val('');
+                window.selectedDate = null;
+                return;
+            }
             
             // Format for Django (YYYY-MM-DD HH:MM:SS)
             const year = gregorianDate.getFullYear();
@@ -740,15 +777,28 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('persian_date').classList.add('is-invalid');
             errorMessages.push('• لطفاً تاریخ نوبت را انتخاب کنید');
         } else {
-            document.getElementById('persian_date').classList.remove('is-invalid');
-            
-            // Ensure hidden field is populated
-            if (window.selectedDate && (!hiddenDateTimeValue.trim() || hiddenDateTimeValue === '')) {
-                const timeToUse = window.selectedTime || '16:00';
-                const datetime = `${window.selectedDate} ${timeToUse}:00`;
-                console.log('Populating hidden field with:', datetime);
-                if (hiddenDateTime) {
-                    hiddenDateTime.value = datetime;
+            // Check if it's Thursday or Friday
+            if (window.selectedDate) {
+                const selectedDate = new Date(window.selectedDate);
+                const dayOfWeek = selectedDate.getDay(); // 0=Sunday, 1=Monday, ..., 5=Friday, 6=Saturday
+                
+                // Thursday is 4, Friday is 5 in JavaScript getDay()
+                if (dayOfWeek === 4 || dayOfWeek === 5) {
+                    isValid = false;
+                    document.getElementById('persian_date').classList.add('is-invalid');
+                    errorMessages.push('• پنج‌شنبه و جمعه مطب تعطیل است. لطفاً روز دیگری انتخاب کنید');
+                } else {
+                    document.getElementById('persian_date').classList.remove('is-invalid');
+                    
+                    // Ensure hidden field is populated
+                    if (window.selectedDate && (!hiddenDateTimeValue.trim() || hiddenDateTimeValue === '')) {
+                        const timeToUse = window.selectedTime || '16:00';
+                        const datetime = `${window.selectedDate} ${timeToUse}:00`;
+                        console.log('Populating hidden field with:', datetime);
+                        if (hiddenDateTime) {
+                            hiddenDateTime.value = datetime;
+                        }
+                    }
                 }
             }
         }
